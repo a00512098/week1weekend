@@ -166,10 +166,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 appendBasicSymbolToResult("-");
                 break;
             case R.id.multiplication:
-                appendBasicSymbolToResult("×");
+                appendBasicSymbolToResult("*");
                 break;
             case R.id.division:
-                appendBasicSymbolToResult("÷");
+                appendBasicSymbolToResult("/");
                 break;
             case R.id.clear:
                 clearResult();
@@ -266,10 +266,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // ToDo: check this and finish
     private void appendParanthesisToResult(String symbol) {
-        isEqualJustBeenPressed = false;
-        if (resultIsZero() && symbol.equals(")"))
+        if (resultIsZero() && symbol.equals(")")) {
+            isEqualJustBeenPressed = false;
             return;
-        if (resultIsZero() && symbol.equals("(")) {
+        }
+        if (resultIsZero() && symbol.equals("(") || isEqualJustBeenPressed) {
+            isEqualJustBeenPressed = false;
             result.setText(symbol);
             return;
         }
@@ -293,9 +295,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String checkForSymbols(String equation) {
-        String str = equation.replaceAll("÷", "/");
-        str = str.replaceAll("×", "*");
-
+        // This regex will match any numbers or symbols before an opening parenthesis
+        // The first regex help the calculator work with stuff like 2(2)(2)(2) --> 2*(2)*(2)*(2)
+        // The second one helps with (-3+5)(4-2) --> (-3+5)*(4-2)
+        // And the third one with (4+2)2 --> (4+2)*2
+        String str = equation.replaceAll("(\\d+)(\\([+-]?\\d+)", "$1*$2");
+        str = str.replaceAll("\\)\\(", ")*(");
+        str = str.replaceAll("(.+\\))(\\d+)", "$1*$2");
+        Log.d("Log.d","str: " + str);
+        Log.d("Log.d","equation: " + equation);
         return str;
     }
 
