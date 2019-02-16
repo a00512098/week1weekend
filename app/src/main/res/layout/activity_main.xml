@@ -15,6 +15,7 @@
         android:maxLines="5"
         android:scrollbars="vertical"
         android:text="0"
+        android:fontFamily="@font/digital7family"
         android:textAlignment="textEnd"
         android:textSize="@dimen/result"
         app:layout_constraintBottom_toTopOf="@+id/space"
