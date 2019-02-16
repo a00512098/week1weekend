@@ -2,4 +2,6 @@
 <resources>
     <dimen name="buttonTextLand">28sp</dimen>
     <dimen name="buttonText">55sp</dimen>
+    <dimen name="result">60sp</dimen>
+    <dimen name="result_land">60sp</dimen>
 </resources>

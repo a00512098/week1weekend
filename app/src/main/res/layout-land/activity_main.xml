@@ -13,12 +13,17 @@
         android:background="@color/white"
         android:text="0"
         android:textAlignment="textEnd"
-        android:textSize="75sp"
+        android:textSize="@dimen/result_land"
+        android:scrollbars="vertical"
+        android:maxLines="3"
+        android:maxLength="20"
         app:layout_constraintBottom_toTopOf="@+id/numbers"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!--ToDo: add a layout under this textView-->
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/numbers"
@@ -284,7 +289,7 @@
             app:layout_constraintBottom_toTopOf="@+id/multiplication"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            app:layout_constraintTop_toBottomOf="@+id/clear" />
 
         <TextView
             android:id="@+id/multiplication"
@@ -332,7 +337,7 @@
             app:layout_constraintTop_toBottomOf="@+id/minus" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/clear"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:text="C"
@@ -348,15 +353,15 @@
     </android.support.constraint.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/backspace"
         android:layout_width="30dp"
         android:layout_height="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/operations"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="@+id/result"
+        app:layout_constraintEnd_toEndOf="@+id/result"
         app:srcCompat="@drawable/ic_backspace_black_24dp" />
 
     <android.support.constraint.ConstraintLayout
