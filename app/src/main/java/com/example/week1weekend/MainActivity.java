@@ -338,6 +338,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // This method uses a Javascript engine to evaluate the operations
     private String evaluate(String equation) throws ScriptException {
+        if (checkForFactorial(equation)){
+            return "NOT!";
+        }
         equation = checkForSymbols(equation);
         equation = checkForSpecial(equation);
         equation = checkForConstant(equation);
@@ -346,6 +349,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (format.charAt(format.length()-1) == '0')
             return format.substring(0, format.length()-2);
         return result.toString();
+    }
+
+    private boolean checkForFactorial(String equation) {
+        boolean hasFactorial = equation.contains("!");
+
+        return hasFactorial;
     }
 
     private String checkForSpecial(String equation) {
