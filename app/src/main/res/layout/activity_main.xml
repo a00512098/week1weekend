@@ -34,7 +34,7 @@
         android:maxLines="2"
         android:scrollbars="vertical"
         android:text="0"
-        android:textAlignment="textEnd"
+        android:gravity="bottom|right"
         android:textSize="@dimen/result"
         app:layout_constraintBottom_toTopOf="@+id/space"
         app:layout_constraintEnd_toEndOf="parent"
