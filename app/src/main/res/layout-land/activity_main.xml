@@ -7,40 +7,58 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/result"
+        android:id="@+id/operations"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
         android:fontFamily="@font/digital7family"
         android:maxLength="20"
-        android:maxLines="3"
+        android:maxLines="1"
         android:scrollbars="vertical"
         android:text="0"
         android:textAlignment="textEnd"
-        android:textSize="@dimen/result_land"
-        app:layout_constraintBottom_toTopOf="@+id/space"
+        android:textSize="@dimen/operations_land"
+        app:layout_constraintBottom_toTopOf="@+id/result"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.375"
+        app:layout_constraintHeight_percent="@dimen/operations_height_land"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--ToDo: add a layout under this textView-->
 
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:maxLength="20"
+        android:maxLines="1"
+        android:scrollbars="vertical"
+        android:text="0"
+        android:fontFamily="@font/digital7family"
+        android:textAlignment="textEnd"
+        android:textSize="@dimen/result_land"
+        app:layout_constraintBottom_toTopOf="@+id/space"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="@dimen/result_height_land"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/operations" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/space"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent=".05"
+        android:background="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/extraButtons"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="@dimen/space_height_land"
         app:layout_constraintStart_toStartOf="parent"
-        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/result">
 
         <ImageView
             android:id="@+id/backspace"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -54,8 +72,8 @@
         android:layout_height="0dp"
         android:background="@color/operationButtons"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/operations"
-        app:layout_constraintHeight_percent="0.575"
+        app:layout_constraintEnd_toStartOf="@+id/basicSymbols"
+        app:layout_constraintHeight_percent="@dimen/buttons_height_land"
         app:layout_constraintStart_toEndOf="@+id/extraButtons"
         app:layout_constraintTop_toBottomOf="@+id/space"
         app:layout_constraintWidth_percent="0.5">
@@ -287,17 +305,15 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/operations"
+        android:id="@+id/basicSymbols"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/operationButtons"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.575"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHeight_percent="@dimen/buttons_height_land"
         app:layout_constraintStart_toEndOf="@+id/numbers"
         app:layout_constraintTop_toBottomOf="@+id/space"
-        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintWidth_percent="0.17">
 
 
@@ -384,9 +400,9 @@
         android:background="@color/operationButtons"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/numbers"
-        app:layout_constraintHeight_percent=".575"
+        app:layout_constraintHeight_percent="@dimen/buttons_height_land"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/numbers"
+        app:layout_constraintTop_toBottomOf="@+id/space"
         app:layout_constraintWidth_percent=".333">
 
         <TextView
@@ -539,4 +555,5 @@
             app:layout_constraintStart_toEndOf="@+id/exponential"
             app:layout_constraintTop_toBottomOf="@+id/euler" />
     </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>

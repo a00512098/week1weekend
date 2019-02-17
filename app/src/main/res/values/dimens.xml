@@ -2,6 +2,13 @@
 <resources>
     <dimen name="buttonTextLand">28sp</dimen>
     <dimen name="buttonText">55sp</dimen>
-    <dimen name="result">60sp</dimen>
-    <dimen name="result_land">60sp</dimen>
+    <dimen name="operations">60sp</dimen>
+    <dimen name="result">50sp</dimen>
+    <dimen name="operations_land">60sp</dimen>
+    <dimen name="result_land">50sp</dimen>
+
+    <dimen name="result_height_land">0.20</dimen>
+    <dimen name="operations_height_land">0.15</dimen>
+    <dimen name="buttons_height_land">0.55</dimen>
+    <dimen name="space_height_land">0.10</dimen>
 </resources>
