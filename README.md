@@ -12,8 +12,8 @@ This app works as a regular calculator when the device is in portrait mode, but 
 5. Percentage
 6. Group operations with parenthesis
 
-| This is an example of the regular calculator working | |
+| This is an example of the regular calculator working: | |
 | --- | --- |
-| ![Alt Text]("Screenshot regular calculator") | ![Alt Text]("Screenshot regular calculator") |
+| ![Alt Text](https://github.com/a00512098/screenshots/blob/master/week1weekend/Capture1.PNG?raw=true "Screenshot regular calculator") | ![Alt Text](https://github.com/a00512098/screenshots/blob/master/week1weekend/Capture2.PNG?raw=true "Screenshot regular calculator") |
 
 ***
