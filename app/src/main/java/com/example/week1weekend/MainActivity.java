@@ -25,20 +25,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView division, clear, percentage, openP, closeP;
     TextView sin, cos, tan, ln, log, factorial;
     TextView pi, euler, power, root;
-    TextView result;
+    TextView operations, result;
     ImageView backspace;
     boolean isEqualJustBeenPressed;
+    ScriptEngine engine;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // This is a Javascript engine. It will handle all my operations.
+        engine = new ScriptEngineManager().getEngineByName("rhino");
         initViews();
         setListeners();
         isEqualJustBeenPressed = false;
     }
 
     private void initViews() {
+        operations = findViewById(R.id.operations);
+        operations.setMovementMethod(new ScrollingMovementMethod());
         result = findViewById(R.id.result);
         result.setMovementMethod(new ScrollingMovementMethod());
 
@@ -76,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setListeners() {
-        result.setOnLongClickListener(this);
+        operations.setOnLongClickListener(this);
         number0.setOnClickListener(this);
         number1.setOnClickListener(this);
         number2.setOnClickListener(this);
@@ -118,164 +123,212 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.d("Log.d", String.valueOf(v.getId()));
         switch (v.getId()) {
             case R.id.number0:
-                appendNumberToResult("0");
+                appendNumber("0");
                 break;
             case R.id.number1:
-                appendNumberToResult("1");
+                appendNumber("1");
                 break;
             case R.id.number2:
-                appendNumberToResult("2");
+                appendNumber("2");
                 break;
             case R.id.number3:
-                appendNumberToResult("3");
+                appendNumber("3");
                 break;
             case R.id.number4:
-                appendNumberToResult("4");
+                appendNumber("4");
                 break;
             case R.id.number5:
-                appendNumberToResult("5");
+                appendNumber("5");
                 break;
             case R.id.number6:
-                appendNumberToResult("6");
+                appendNumber("6");
                 break;
             case R.id.number7:
-                appendNumberToResult("7");
+                appendNumber("7");
                 break;
             case R.id.number8:
-                appendNumberToResult("8");
+                appendNumber("8");
                 break;
             case R.id.number9:
-                appendNumberToResult("9");
+                appendNumber("9");
                 break;
             case R.id.point:
-                appendPointToResult();
+                appendPoint();
                 break;
             case R.id.equal:
                 try {
                     isEqualJustBeenPressed = true;
-                    result.setText(evaluate(result.getText().toString()));
+                    result.setText(evaluate(operations.getText().toString()));
                 } catch (ScriptException e) {
                     result.setText("E");
                     e.printStackTrace();
                 }
                 break;
             case R.id.plus:
-                appendBasicSymbolToResult("+");
+                appendBasicSymbol("+");
                 break;
             case R.id.minus:
-                appendBasicSymbolToResult("-");
+                appendBasicSymbol("-");
                 break;
             case R.id.multiplication:
-                appendBasicSymbolToResult("*");
+                appendBasicSymbol("*");
                 break;
             case R.id.division:
-                appendBasicSymbolToResult("/");
+                appendBasicSymbol("/");
                 break;
             case R.id.clear:
-                clearResult();
+                clear();
                 break;
             case R.id.percentage:
                 try {
                     isEqualJustBeenPressed = true;
-                    result.setText(evaluate(result.getText().toString()+"/100"));
+                    result.setText(evaluate("("+operations.getText().toString()+")/100"));
                 } catch (ScriptException e) {
                     result.setText("E");
                     e.printStackTrace();
                 }
                 break;
             case R.id.closeP:
-                appendParanthesisToResult(")");
+                appendParanthesis(")");
                 break;
             case R.id.openP:
-                appendParanthesisToResult("(");
+                appendParanthesis("(");
                 break;
             case R.id.backspace:
                 backspace();
                 break;
             case R.id.cos:
+                appendComplexFunction("cos(");
                 break;
             case R.id.sin:
+                appendComplexFunction("sin(");
                 break;
             case R.id.tan:
+                appendComplexFunction("tan(");
                 break;
             case R.id.ln:
+                appendComplexFunction("lN(");
                 break;
             case R.id.log:
+                appendComplexFunction("log(");
                 break;
             case R.id.factorial:
+                appendComplexFunction("!");
                 break;
             case R.id.pi:
+                appendComplexFunction("m");
                 break;
             case R.id.euler:
+                appendComplexFunction("e");
                 break;
             case R.id.exponential:
+                appendComplexFunction("^");
                 break;
             case R.id.root:
+                appendComplexFunction("{");
                 break;
         }
+    }
+
+    private void appendComplexFunction(String function) {
+        if (isEqualJustBeenPressed)
+            clearOperations();
+        isEqualJustBeenPressed = false;
+        if (resultIsError())
+            return;
+        if (operationsIsZero())
+            operations.setText(function);
+        else
+            operations.append(function);
     }
 
     private void backspace() {
         isEqualJustBeenPressed = false;
-        if (resultIsZero() || resultIsOneDigit()){
-            clearResult();
+        if (operationsIsZero() || operationsIsOneDigit()){
+            clearOperations();
             return;
         }
-        String txt = result.getText().toString();
-        result.setText(txt.substring(0, txt.length()-1));
+        String txt = operations.getText().toString();
+        if (txt.length() > 2) {
+            char special = txt.charAt(txt.length()-2);
+            switch (special) {
+                // special function with 3 letters cos(
+                case 's':
+                case 'g':
+                case 'n':
+                    operations.setText(txt.substring(0, txt.length()-4));
+                    break;
+                case 'N':
+                    operations.setText(txt.substring(0, txt.length()-3));
+                    break;
+                case '^':
+                case '{':
+                    operations.setText(txt.substring(0, txt.length() -2));
+                    break;
+            }
+            if (operations.getText().length() == 0)
+                clearOperations();
+            return;
+        }
+        operations.setText(txt.substring(0, txt.length()-1));
     }
 
-    private void clearResult() {
+    private void clearOperations() {
+        isEqualJustBeenPressed = false;
+        operations.setText("0");
+    }
+
+    private void clear() {
         isEqualJustBeenPressed = false;
         result.setText("0");
+        operations.setText("0");
     }
 
-    private boolean resultIsZero() {
-        return result.getText().toString().equals("0");
+    private boolean operationsIsZero() {
+        return operations.getText().toString().equals("0");
     }
 
-    private boolean resultIsOneDigit() {
-        return result.getText().length() == 1;
+    private boolean operationsIsOneDigit() {
+        return operations.getText().length() == 1;
     }
 
-    private void appendNumberToResult(String number) {
+    private void appendNumber(String number) {
         if (isEqualJustBeenPressed)
-            clearResult();
+            clearOperations();
         isEqualJustBeenPressed = false;
         if (resultIsError())
             return;
-        if (resultIsZero())
-            result.setText(number);
+        if (operationsIsZero())
+            operations.setText(number);
         else
-            result.append(number);
+            operations.append(number);
     }
 
-    private void appendPointToResult() {
+    private void appendPoint() {
         isEqualJustBeenPressed = false;
         if (resultIsError())
             return;
-        result.append(".");
+        operations.append(".");
     }
 
-    private void appendBasicSymbolToResult(String symbol) {
+    private void appendBasicSymbol(String symbol) {
         isEqualJustBeenPressed = false;
-        if (resultIsError() || resultIsZero())
+        if (resultIsError() || operationsIsZero())
             return;
-        result.append(symbol);
+        operations.append(symbol);
     }
 
-    // ToDo: check this and finish
-    private void appendParanthesisToResult(String symbol) {
-        if (resultIsZero() && symbol.equals(")")) {
+    private void appendParanthesis(String symbol) {
+        if (operationsIsZero() && symbol.equals(")")) {
             isEqualJustBeenPressed = false;
             return;
         }
-        if (resultIsZero() && symbol.equals("(") || isEqualJustBeenPressed) {
+        if (operationsIsZero() && symbol.equals("(") || isEqualJustBeenPressed) {
             isEqualJustBeenPressed = false;
-            result.setText(symbol);
+            operations.setText(symbol);
             return;
         }
-        result.append(symbol);
+        operations.append(symbol);
 
     }
 
@@ -285,13 +338,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // This method uses a Javascript engine to evaluate the operations
     private String evaluate(String equation) throws ScriptException {
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("rhino");
         equation = checkForSymbols(equation);
+        equation = checkForSpecial(equation);
+        equation = checkForConstant(equation);
         Object result = engine.eval(equation);
         String format = String.valueOf(result);
         if (format.charAt(format.length()-1) == '0')
             return format.substring(0, format.length()-2);
         return result.toString();
+    }
+
+    private String checkForSpecial(String equation) {
+        String str;
+        str = equation.replaceAll("sin\\(", "Math.sin(");
+        str = str.replaceAll("cos\\(", "Math.cos(");
+        str = str.replaceAll("tan\\(", "Math.tan(");
+        str = str.replaceAll("log\\(", "Math.log(");
+        str = str.replaceAll("lN\\(", "Math.log(");
+        str = str.replaceAll("(.+)\\^(.+)", "Math.pow($1,$2)");
+        str = str.replaceAll("\\{(.+)", "Math.sqrt($1)");
+        return str;
+    }
+
+    private String checkForConstant(String equation) {
+        String str = equation.replaceAll("(\\d+)m", "$1*m");
+        str = str.replaceAll("m(\\d+)", "m*$1");
+        str = str.replaceAll("m", "Math.PI");
+        str = str.replaceAll("(\\d+)e", "$1*e");
+        str = str.replaceAll("e(\\d+)", "e*$1");
+        str = str.replaceAll("e", "Math.E");
+
+        return str;
     }
 
     private String checkForSymbols(String equation) {
@@ -309,11 +386,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onLongClick(View v) {
-        if (v.getId() == R.id.result){
+        if (v.getId() == R.id.operations || v.getId() == R.id.result){
             ClipboardManager cm = (ClipboardManager)getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("Result", result.getText().toString());
+            ClipData clip = ClipData.newPlainText("Result", operations.getText().toString());
             cm.setPrimaryClip(clip);
-            Toast.makeText(getApplicationContext(), "Text copied to clipboard", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
